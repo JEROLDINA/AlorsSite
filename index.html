@@ -442,21 +442,7 @@
       background: #000;
     }
 
-    .viewer-note {
-      position: absolute;
-      top: 18px;
-      left: 18px;
-      z-index: 8;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.5);
-      border: 1px solid rgba(255,255,255,.1);
-      color: #fff;
-      backdrop-filter: blur(8px);
-      font-size: 13px;
-      max-width: 380px;
-      pointer-events: none;
-    }
+    
 
     @media (max-width: 1200px) {
       .gallery { grid-template-columns: 1fr 1fr; }
@@ -721,7 +707,6 @@
       return `
         <div class="viewer-frame-wrap">
           <iframe class="viewer-frame" src="${src}" allowfullscreen loading="eager"></iframe>
-          <div class="viewer-note">360 viewer загружается из viewer360.html</div>
         </div>
       `;
     }
