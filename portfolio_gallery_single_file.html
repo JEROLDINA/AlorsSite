@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Villa Moderna — Project View</title>
+  <style>
+    :root {
+      --bg: #060606;
+      --panel: #111111;
+      --panel-2: #181818;
+      --text: #f5f5f5;
+      --muted: #b7b7b7;
+      --accent: #d79b47;
+      --border: rgba(255,255,255,0.08);
+      --radius: 18px;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --container: 1600px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body.modal-open { overflow: hidden; }
+
+    a { color: inherit; text-decoration: none; }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--container));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero__bg img {
+      filter: brightness(.72);
+    }
+
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 35%, rgba(0,0,0,0.82) 100%),
+        linear-gradient(90deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.14) 45%, rgba(0,0,0,0.18) 100%);
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      padding: 0 0 60px;
+      width: 100%;
+    }
+
+    .hero__inner {
+      max-width: 700px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(44px, 7vw, 78px);
+      line-height: .98;
+      font-weight: 300;
+      letter-spacing: -0.04em;
+    }
+
+    .hero__text {
+      margin: 0;
+      max-width: 540px;
+      color: rgba(255,255,255,.78);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      margin-top: 32px;
+    }
+
+    .fact {
+      min-width: 90px;
+    }
+
+    .fact__label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .fact__value {
+      color: rgba(255,255,255,.84);
+      font-size: 15px;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      font-size: 26px;
+      color: rgba(255,255,255,.7);
+      animation: bounce 1.8s infinite;
+      z-index: 3;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    .section {
+      padding: 24px 0 56px;
+      background: #000;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 370px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .card--wide { grid-column: span 2; }
+    .card--tall { min-height: 470px; }
+
+    .card__media {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .card__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.65) 100%);
+      pointer-events: none;
+    }
+
+    .card__title {
+      position: absolute;
+      left: 16px;
+      bottom: 14px;
+      z-index: 2;
+      font-size: 18px;
+      font-weight: 600;
+      text-shadow: 0 4px 18px rgba(0,0,0,.45);
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.6);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 12px;
+      line-height: 1;
+      backdrop-filter: blur(8px);
+    }
+
+    .compare-thumb {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .compare-thumb__after,
+    .compare-thumb__before {
+      position: absolute;
+      inset: 0;
+    }
+
+    .compare-thumb__after {
+      width: 50%;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,.85);
+    }
+
+    .compare-thumb__handle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,.22);
+      z-index: 2;
+    }
+
+    .viewer-thumb {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .viewer-thumb::after {
+      content: "↔ тяните";
+      position: absolute;
+      right: 14px;
+      bottom: 16px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.1);
+      font-size: 12px;
+      color: #fff;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.86);
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal__panel {
+      position: relative;
+      width: min(1400px, 100%);
+      max-height: calc(100vh - 40px);
+      background: #0b0b0b;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .modal__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .modal__content {
+      width: 100%;
+      height: min(84vh, 920px);
+      background: #000;
+    }
+
+    .modal__caption {
+      padding: 16px 22px 18px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      color: rgba(255,255,255,.78);
+      font-size: 15px;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .compare-modal {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      user-select: none;
+      background: #000;
+    }
+
+    .compare-modal img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      background: #000;
+    }
+
+    .compare-modal__after {
+      width: 50%;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,.9);
+    }
+
+    .compare-modal__handle {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background: rgba(255,255,255,.92);
+      pointer-events: none;
+    }
+
+    .compare-modal__knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: #111;
+      background: rgba(255,255,255,.96);
+      font-size: 20px;
+      font-weight: 800;
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      pointer-events: none;
+    }
+
+    .compare-modal__labels {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .compare-modal__label {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.5);
+      border: 1px solid rgba(255,255,255,.1);
+      font-size: 12px;
+      color: #fff;
+    }
+
+    .viewer360 {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .viewer360:active { cursor: grabbing; }
+
+    .viewer360__track {
+      position: absolute;
+      inset: 0;
+      background-repeat: repeat-x;
+      background-size: auto 100%;
+      background-position: 0 center;
+    }
+
+    .viewer360__hint {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.12);
+      color: #fff;
+      font-size: 13px;
+      backdrop-filter: blur(8px);
+    }
+
+    .viewer360__topnote {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.85);
+      font-size: 13px;
+      max-width: 360px;
+    }
+
+    @media (max-width: 1200px) {
+      .gallery { grid-template-columns: repeat(3, 1fr); }
+      .card--wide { grid-column: span 1; }
+    }
+
+    @media (max-width: 820px) {
+      .hero { min-height: 82vh; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .card, .card--tall { min-height: 290px; }
+      .hero__content { padding-bottom: 48px; }
+      .hero__text { font-size: 16px; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(calc(100% - 18px), var(--container)); }
+      .gallery { grid-template-columns: 1fr; }
+      .card, .card--tall { min-height: 260px; }
+      h1 { font-size: 48px; }
+      .facts { gap: 18px; }
+      .modal { padding: 10px; }
+      .modal__content { height: 68vh; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__bg">
+      <img src="images/hero.jpg" alt="Villa Moderna" />
+    </div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__content">
+      <div class="container">
+        <div class="hero__inner">
+          <div class="eyebrow">Архитектурная визуализация</div>
+          <h1>Villa Moderna</h1>
+          <p class="hero__text">
+            Современная вилла с панорамным остеклением и интеграцией с ландшафтом.
+            Ниже — галерея проекта с тремя форматами просмотра: обычные кадры,
+            сравнение до/после и 360° панорама.
+          </p>
+
+          <div class="facts">
+            <div class="fact">
+              <div class="fact__label">Локация</div>
+              <div class="fact__value">Барселона, Испания</div>
+            </div>
+            <div class="fact">
+              <div class="fact__label">Год</div>
+              <div class="fact__value">2026</div>
+            </div>
+            <div class="fact">
+              <div class="fact__label">Площадь</div>
+              <div class="fact__value">480 м²</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="scroll-indicator" href="#gallery" aria-label="Прокрутить к галерее">⌄</a>
+  </header>
+
+  <main class="section" id="gallery">
+    <div class="container">
+      <div class="gallery">
+        <!-- Обычные фотографии -->
+        <article class="card" data-type="image" data-title="Вид спереди" data-caption="Обычная фотография проекта" data-src="images/photo-1.jpg">
+          <div class="card__media">
+            <img src="images/photo-1.jpg" alt="Вид спереди" />
+          </div>
+          <div class="card__title">Вид спереди</div>
+        </article>
+
+        <article class="card card--wide" data-type="image" data-title="Вид сзади" data-caption="Обычная фотография проекта" data-src="images/photo-2.jpg">
+          <div class="card__media">
+            <img src="images/photo-2.jpg" alt="Вид сзади" />
+          </div>
+          <div class="card__title">Вид сзади</div>
+        </article>
+
+        <!-- Сравнение -->
+        <article class="card" data-type="compare" data-title="Главный фасад — До / После" data-caption="Сравнение с ползунком слева направо" data-before="images/compare-before.jpg" data-after="images/compare-after.jpg">
+          <div class="card__media compare-thumb">
+            <div class="compare-thumb__before">
+              <img src="images/compare-before.jpg" alt="До" />
+            </div>
+            <div class="compare-thumb__after">
+              <img src="images/compare-after.jpg" alt="После" />
+            </div>
+            <div class="compare-thumb__handle">↔</div>
+          </div>
+          <div class="badge">Compare</div>
+          <div class="card__title">Главный фасад — День / Ночь</div>
+        </article>
+
+        <!-- 360 -->
+        <article class="card" data-type="viewer360" data-title="Панорама территории" data-caption="360° панорама. Нажмите и тяните мышью влево / вправо." data-panorama="images/panorama-360.jpg">
+          <div class="card__media">
+            <div class="viewer-thumb" style="background-image:url('images/panorama-360.jpg')"></div>
+          </div>
+          <div class="badge">360°</div>
+          <div class="card__title">Панорама территории</div>
+        </article>
+
+        <article class="card card--tall" data-type="image" data-title="Интерьер гостиной" data-caption="Обычная фотография проекта" data-src="images/photo-3.jpg">
+          <div class="card__media">
+            <img src="images/photo-3.jpg" alt="Интерьер гостиной" />
+          </div>
+          <div class="card__title">Интерьер гостиной</div>
+        </article>
+
+        <article class="card" data-type="image" data-title="Терраса с бассейном" data-caption="Обычная фотография проекта" data-src="images/photo-4.jpg">
+          <div class="card__media">
+            <img src="images/photo-4.jpg" alt="Терраса с бассейном" />
+          </div>
+          <div class="card__title">Терраса с бассейном</div>
+        </article>
+
+        <article class="card" data-type="image" data-title="Вид с высоты" data-caption="Обычная фотография проекта" data-src="images/photo-5.jpg">
+          <div class="card__media">
+            <img src="images/photo-5.jpg" alt="Вид с высоты" />
+          </div>
+          <div class="card__title">Вид с высоты</div>
+        </article>
+
+        <article class="card card--tall" data-type="image" data-title="Ландшафтный дизайн" data-caption="Обычная фотография проекта" data-src="images/photo-6.jpg">
+          <div class="card__media">
+            <img src="images/photo-6.jpg" alt="Ландшафтный дизайн" />
+          </div>
+          <div class="card__title">Ландшафтный дизайн</div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal__panel">
+      <button class="modal__close" id="modalClose" aria-label="Закрыть">×</button>
+      <div class="modal__content" id="modalContent"></div>
+      <div class="modal__caption" id="modalCaption"></div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    const modalCaption = document.getElementById('modalCaption');
+    const modalClose = document.getElementById('modalClose');
+    const cards = document.querySelectorAll('.card');
+
+    function openModal(html, caption) {
+      modalContent.innerHTML = html;
+      modalCaption.textContent = caption || '';
+      modal.classList.add('open');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.classList.remove('modal-open');
+      modalContent.innerHTML = '';
+      modalCaption.textContent = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function createImageView(src, title) {
+      return `<img class="modal-image" src="${src}" alt="${title}">`;
+    }
+
+    function createCompareView(before, after) {
+      return `
+        <div class="compare-modal" id="compareModal">
+          <div class="compare-modal__labels">
+            <div class="compare-modal__label">До</div>
+            <div class="compare-modal__label">После</div>
+          </div>
+          <img src="${before}" alt="До">
+          <div class="compare-modal__after" id="compareAfterWrap">
+            <img src="${after}" alt="После">
+          </div>
+          <div class="compare-modal__handle" id="compareHandle"></div>
+          <div class="compare-modal__knob">↔</div>
+        </div>
+      `;
+    }
+
+    function initCompareSlider() {
+      const compare = document.getElementById('compareModal');
+      const afterWrap = document.getElementById('compareAfterWrap');
+      const handle = document.getElementById('compareHandle');
+      if (!compare || !afterWrap || !handle) return;
+
+      let active = false;
+
+      const setPosition = (clientX) => {
+        const rect = compare.getBoundingClientRect();
+        let x = clientX - rect.left;
+        x = Math.max(0, Math.min(x, rect.width));
+        const percent = (x / rect.width) * 100;
+        afterWrap.style.width = percent + '%';
+        handle.style.left = percent + '%';
+      };
+
+      const start = (x) => { active = true; setPosition(x); };
+      const move = (x) => { if (active) setPosition(x); };
+      const end = () => { active = false; };
+
+      compare.addEventListener('mousedown', (e) => start(e.clientX));
+      window.addEventListener('mousemove', (e) => move(e.clientX));
+      window.addEventListener('mouseup', end);
+
+      compare.addEventListener('touchstart', (e) => start(e.touches[0].clientX), { passive: true });
+      compare.addEventListener('touchmove', (e) => move(e.touches[0].clientX), { passive: true });
+      window.addEventListener('touchend', end, { passive: true });
+    }
+
+    function create360View(panorama) {
+      return `
+        <div class="viewer360" id="viewer360">
+          <div class="viewer360__track" id="viewer360Track" style="background-image:url('${panorama}')"></div>
+          <div class="viewer360__topnote">Для корректной работы используйте equirectangular панораму 2:1.</div>
+          <div class="viewer360__hint">Тяните влево / вправо</div>
+        </div>
+      `;
+    }
+
+    function init360Viewer() {
+      const viewer = document.getElementById('viewer360');
+      const track = document.getElementById('viewer360Track');
+      if (!viewer || !track) return;
+
+      let isDown = false;
+      let startX = 0;
+      let currentX = 0;
+      let velocity = 0;
+      let raf = null;
+
+      function render() {
+        track.style.backgroundPosition = `${currentX}px center`;
+        if (!isDown) {
+          currentX += velocity;
+          velocity *= 0.95;
+          if (Math.abs(velocity) < 0.02) velocity = 0;
+        }
+        raf = requestAnimationFrame(render);
+      }
+
+      function pointerDown(clientX) {
+        isDown = true;
+        startX = clientX;
+      }
+
+      function pointerMove(clientX) {
+        if (!isDown) return;
+        const dx = clientX - startX;
+        startX = clientX;
+        currentX += dx;
+        velocity = dx * 0.35;
+      }
+
+      function pointerUp() {
+        isDown = false;
+      }
+
+      viewer.addEventListener('mousedown', (e) => pointerDown(e.clientX));
+      window.addEventListener('mousemove', (e) => pointerMove(e.clientX));
+      window.addEventListener('mouseup', pointerUp);
+
+      viewer.addEventListener('touchstart', (e) => pointerDown(e.touches[0].clientX), { passive: true });
+      viewer.addEventListener('touchmove', (e) => pointerMove(e.touches[0].clientX), { passive: true });
+      window.addEventListener('touchend', pointerUp, { passive: true });
+
+      render();
+
+      const observer = new MutationObserver(() => {
+        if (!modal.classList.contains('open') && raf) {
+          cancelAnimationFrame(raf);
+          observer.disconnect();
+        }
+      });
+      observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const type = card.dataset.type;
+        const title = card.dataset.title || '';
+        const caption = card.dataset.caption || '';
+
+        if (type === 'image') {
+          openModal(createImageView(card.dataset.src, title), `${title} — ${caption}`);
+        }
+
+        if (type === 'compare') {
+          openModal(createCompareView(card.dataset.before, card.dataset.after), `${title} — ${caption}`);
+          initCompareSlider();
+        }
+
+        if (type === 'viewer360') {
+          openModal(create360View(card.dataset.panorama), `${title} — ${caption}`);
+          init360Viewer();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
