@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Villa Moderna — Project View</title>
+  <title>Riviera Village — Project View</title>
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <style>
     :root {
       --bg: #060606;
       --panel: #111111;
-      --panel-2: #181818;
       --text: #f5f5f5;
-      --muted: #b7b7b7;
       --accent: #d79b47;
       --border: rgba(255,255,255,0.08);
-      --radius: 18px;
+      --radius: 20px;
       --shadow: 0 20px 60px rgba(0,0,0,.35);
       --container: 1600px;
     }
@@ -29,7 +28,6 @@
     }
 
     body.modal-open { overflow: hidden; }
-
     a { color: inherit; text-decoration: none; }
 
     img {
@@ -59,26 +57,33 @@
     }
 
     .hero__bg img {
-      filter: brightness(.72);
-    }
-
-    .hero__overlay {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 35%, rgba(0,0,0,0.82) 100%),
-        linear-gradient(90deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.14) 45%, rgba(0,0,0,0.18) 100%);
+      filter: none;
     }
 
     .hero__content {
       position: relative;
       z-index: 2;
-      padding: 0 0 60px;
       width: 100%;
+      padding: 0 0 56px;
     }
 
     .hero__inner {
-      max-width: 700px;
+      position: relative;
+      max-width: 760px;
+      padding: 26px 28px 24px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 24px 60px rgba(0,0,0,.28);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero__inner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.38) 35%, rgba(0,0,0,.72) 100%);
+      z-index: -1;
     }
 
     .eyebrow {
@@ -100,8 +105,8 @@
 
     .hero__text {
       margin: 0;
-      max-width: 540px;
-      color: rgba(255,255,255,.78);
+      max-width: 580px;
+      color: rgba(255,255,255,.88);
       font-size: 18px;
       line-height: 1.65;
     }
@@ -113,9 +118,7 @@
       margin-top: 32px;
     }
 
-    .fact {
-      min-width: 90px;
-    }
+    .fact { min-width: 90px; }
 
     .fact__label {
       font-size: 11px;
@@ -127,7 +130,7 @@
     }
 
     .fact__value {
-      color: rgba(255,255,255,.84);
+      color: rgba(255,255,255,.9);
       font-size: 15px;
     }
 
@@ -137,9 +140,10 @@
       bottom: 18px;
       transform: translateX(-50%);
       font-size: 26px;
-      color: rgba(255,255,255,.7);
+      color: rgba(255,255,255,.88);
       animation: bounce 1.8s infinite;
       z-index: 3;
+      text-shadow: 0 6px 18px rgba(0,0,0,.35);
     }
 
     @keyframes bounce {
@@ -154,13 +158,15 @@
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
     }
 
     .card {
       position: relative;
-      min-height: 370px;
+      aspect-ratio: 16 / 9;
+      min-height: 380px;
       border-radius: var(--radius);
       overflow: hidden;
       border: 1px solid var(--border);
@@ -175,21 +181,20 @@
       border-color: rgba(255,255,255,.18);
     }
 
-    .card--wide { grid-column: span 2; }
-    .card--tall { min-height: 470px; }
-
     .card__media {
       position: absolute;
       inset: 0;
       overflow: hidden;
+      background: #0d0d0d;
     }
 
     .card__media::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.65) 100%);
+      background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,.72) 100%);
       pointer-events: none;
+      z-index: 1;
     }
 
     .card__title {
@@ -223,16 +228,26 @@
       pointer-events: none;
     }
 
-    .compare-thumb__after,
-    .compare-thumb__before {
+    .compare-thumb__before,
+    .compare-thumb__after {
       position: absolute;
       inset: 0;
     }
 
     .compare-thumb__after {
-      width: 50%;
-      overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,.85);
+      clip-path: inset(0 0 0 50%);
+      z-index: 1;
+    }
+
+    .compare-thumb__line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: rgba(255,255,255,.95);
+      transform: translateX(-50%);
+      z-index: 2;
     }
 
     .compare-thumb__handle {
@@ -240,16 +255,16 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 999px;
-      background: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.96);
       color: #111;
       display: grid;
       place-items: center;
-      font-weight: 700;
+      font-weight: 800;
       box-shadow: 0 8px 24px rgba(0,0,0,.22);
-      z-index: 2;
+      z-index: 3;
     }
 
     .viewer-thumb {
@@ -257,10 +272,11 @@
       inset: 0;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
     }
 
     .viewer-thumb::after {
-      content: "↔ тяните";
+      content: "360°";
       position: absolute;
       right: 14px;
       bottom: 16px;
@@ -276,52 +292,57 @@
       position: fixed;
       inset: 0;
       display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,.86);
+      background: rgba(0,0,0,.97);
       z-index: 1000;
-      padding: 20px;
     }
 
-    .modal.open { display: flex; }
+    .modal.open { display: block; }
 
     .modal__panel {
       position: relative;
-      width: min(1400px, 100%);
-      max-height: calc(100vh - 40px);
-      background: #0b0b0b;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 22px;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
       overflow: hidden;
-      box-shadow: var(--shadow);
     }
 
     .modal__close {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      z-index: 10;
-      width: 44px;
-      height: 44px;
+      top: 16px;
+      right: 16px;
+      z-index: 30;
+      width: 52px;
+      height: 52px;
       border: 0;
       border-radius: 999px;
       background: rgba(255,255,255,.12);
       color: #fff;
-      font-size: 22px;
+      font-size: 24px;
       cursor: pointer;
+      backdrop-filter: blur(10px);
     }
 
     .modal__content {
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: min(84vh, 920px);
+      height: 100%;
       background: #000;
     }
 
     .modal__caption {
-      padding: 16px 22px 18px;
-      border-top: 1px solid rgba(255,255,255,.06);
-      color: rgba(255,255,255,.78);
+      position: absolute;
+      left: 16px;
+      right: 80px;
+      bottom: 16px;
+      z-index: 20;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.84);
       font-size: 15px;
+      backdrop-filter: blur(10px);
     }
 
     .modal-image {
@@ -338,31 +359,39 @@
       overflow: hidden;
       user-select: none;
       background: #000;
+      cursor: ew-resize;
     }
 
-    .compare-modal img {
+    .compare-modal__before,
+    .compare-modal__after {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+    }
+
+    .compare-modal__before img,
+    .compare-modal__after img {
+      width: 100%;
+      height: 100%;
       object-fit: contain;
-      pointer-events: none;
       background: #000;
+      pointer-events: none;
     }
 
     .compare-modal__after {
-      width: 50%;
-      overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,.9);
+      clip-path: inset(0 0 0 50%);
     }
 
-    .compare-modal__handle {
+    .compare-modal__line {
       position: absolute;
       top: 0;
+      bottom: 0;
       left: 50%;
       width: 2px;
-      height: 100%;
-      background: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.95);
+      transform: translateX(-50%);
+      z-index: 5;
       pointer-events: none;
     }
 
@@ -371,16 +400,17 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 58px;
-      height: 58px;
+      width: 64px;
+      height: 64px;
       border-radius: 999px;
       display: grid;
       place-items: center;
       color: #111;
       background: rgba(255,255,255,.96);
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      z-index: 6;
       pointer-events: none;
     }
 
@@ -391,112 +421,127 @@
       right: 18px;
       display: flex;
       justify-content: space-between;
-      z-index: 4;
+      z-index: 7;
       pointer-events: none;
     }
 
     .compare-modal__label {
-      padding: 8px 10px;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(0,0,0,.5);
+      background: rgba(0,0,0,.55);
       border: 1px solid rgba(255,255,255,.1);
       font-size: 12px;
       color: #fff;
+      backdrop-filter: blur(8px);
     }
 
-    .viewer360 {
+    .viewer360-real {
       position: relative;
       width: 100%;
       height: 100%;
-      overflow: hidden;
       background: #000;
+      overflow: hidden;
       cursor: grab;
       touch-action: none;
+      user-select: none;
     }
 
-    .viewer360:active { cursor: grabbing; }
+    .viewer360-real:active { cursor: grabbing; }
 
-    .viewer360__track {
+    .viewer360-stage {
       position: absolute;
       inset: 0;
-      background-repeat: repeat-x;
-      background-size: auto 100%;
-      background-position: 0 center;
+      width: 100%;
+      height: 100%;
     }
 
-    .viewer360__hint {
+    .viewer360-note,
+    .viewer360-hint {
       position: absolute;
+      z-index: 8;
+      background: rgba(0,0,0,.5);
+      border: 1px solid rgba(255,255,255,.1);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .viewer360-note {
+      top: 18px;
+      left: 18px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      max-width: 420px;
+    }
+
+    .viewer360-hint {
       left: 50%;
       bottom: 20px;
       transform: translateX(-50%);
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(0,0,0,.55);
-      border: 1px solid rgba(255,255,255,.12);
-      color: #fff;
       font-size: 13px;
-      backdrop-filter: blur(8px);
-    }
-
-    .viewer360__topnote {
-      position: absolute;
-      left: 18px;
-      top: 18px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.08);
-      color: rgba(255,255,255,.85);
-      font-size: 13px;
-      max-width: 360px;
     }
 
     @media (max-width: 1200px) {
-      .gallery { grid-template-columns: repeat(3, 1fr); }
-      .card--wide { grid-column: span 1; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .card { min-height: 320px; }
     }
 
     @media (max-width: 820px) {
       .hero { min-height: 82vh; }
-      .gallery { grid-template-columns: 1fr 1fr; }
-      .card, .card--tall { min-height: 290px; }
+      .gallery { grid-template-columns: 1fr; }
       .hero__content { padding-bottom: 48px; }
       .hero__text { font-size: 16px; }
+      .card { min-height: 280px; }
+      .modal__caption {
+        right: 16px;
+        bottom: 12px;
+        font-size: 14px;
+      }
+      .hero__inner { padding: 20px; }
     }
 
     @media (max-width: 560px) {
       .container { width: min(calc(100% - 18px), var(--container)); }
-      .gallery { grid-template-columns: 1fr; }
-      .card, .card--tall { min-height: 260px; }
       h1 { font-size: 48px; }
       .facts { gap: 18px; }
-      .modal { padding: 10px; }
-      .modal__content { height: 68vh; }
+      .card__title { font-size: 16px; }
+      .modal__close {
+        top: 10px;
+        right: 10px;
+        width: 46px;
+        height: 46px;
+      }
+      .compare-modal__knob {
+        width: 56px;
+        height: 56px;
+      }
     }
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="hero__bg">
-      <img src="images/hero.png" alt="Villa Moderna" />
+      <img src="images/hero.png" alt="Riviera Village" />
     </div>
-    <div class="hero__overlay"></div>
 
     <div class="hero__content">
       <div class="container">
         <div class="hero__inner">
           <div class="eyebrow">Архитектурная визуализация</div>
-          <h1>Villa Moderna</h1>
+          <h1>Riviera Village</h1>
           <p class="hero__text">
-            Современная вилла с панорамным остеклением и интеграцией с ландшафтом.
-            Ниже — галерея проекта с тремя форматами просмотра: обычные кадры,
-            сравнение до/после и 360° панорама.
+            Современная частная резиденция с панорамным остеклением, чистой геометрией
+            и интеграцией с природным окружением. Ниже — галерея проекта с обычными кадрами,
+            сравнением до / после и полноценной 360° панорамой.
           </p>
 
           <div class="facts">
             <div class="fact">
               <div class="fact__label">Локация</div>
-              <div class="fact__value">Барселона, Испания</div>
+              <div class="fact__value">Украина</div>
             </div>
             <div class="fact">
               <div class="fact__label">Год</div>
@@ -504,7 +549,7 @@
             </div>
             <div class="fact">
               <div class="fact__label">Площадь</div>
-              <div class="fact__value">480 м²</div>
+              <div class="fact__value">120 м²</div>
             </div>
           </div>
         </div>
@@ -517,7 +562,6 @@
   <main class="section" id="gallery">
     <div class="container">
       <div class="gallery">
-        <!-- Обычные фотографии -->
         <article class="card" data-type="image" data-title="Вид спереди" data-caption="Обычная фотография проекта" data-src="images/photo-1.png">
           <div class="card__media">
             <img src="images/photo-1.png" alt="Вид спереди" />
@@ -525,14 +569,13 @@
           <div class="card__title">Вид спереди</div>
         </article>
 
-        <article class="card card--wide" data-type="image" data-title="Вид сзади" data-caption="Обычная фотография проекта" data-src="images/photo-2.png">
+        <article class="card" data-type="image" data-title="Вид сзади" data-caption="Обычная фотография проекта" data-src="images/photo-2.png">
           <div class="card__media">
             <img src="images/photo-2.png" alt="Вид сзади" />
           </div>
           <div class="card__title">Вид сзади</div>
         </article>
 
-        <!-- Сравнение -->
         <article class="card" data-type="compare" data-title="Главный фасад — До / После" data-caption="Сравнение с ползунком слева направо" data-before="images/compare-before.png" data-after="images/compare-after.png">
           <div class="card__media compare-thumb">
             <div class="compare-thumb__before">
@@ -541,14 +584,14 @@
             <div class="compare-thumb__after">
               <img src="images/compare-after.png" alt="После" />
             </div>
+            <div class="compare-thumb__line"></div>
             <div class="compare-thumb__handle">↔</div>
           </div>
           <div class="badge">Compare</div>
           <div class="card__title">Главный фасад — День / Ночь</div>
         </article>
 
-        <!-- 360 -->
-        <article class="card" data-type="viewer360" data-title="Панорама территории" data-caption="360° панорама. Нажмите и тяните мышью влево / вправо." data-panorama="images/panorama-360.png">
+        <article class="card" data-type="viewer360" data-title="Панорама территории" data-caption="Полноценная 360° панорама" data-panorama="images/panorama-360.png">
           <div class="card__media">
             <div class="viewer-thumb" style="background-image:url('images/panorama-360.png')"></div>
           </div>
@@ -556,7 +599,7 @@
           <div class="card__title">Панорама территории</div>
         </article>
 
-        <article class="card card--tall" data-type="image" data-title="Интерьер гостиной" data-caption="Обычная фотография проекта" data-src="images/photo-3.png">
+        <article class="card" data-type="image" data-title="Интерьер гостиной" data-caption="Обычная фотография проекта" data-src="images/photo-3.png">
           <div class="card__media">
             <img src="images/photo-3.png" alt="Интерьер гостиной" />
           </div>
@@ -577,7 +620,7 @@
           <div class="card__title">Вид с высоты</div>
         </article>
 
-        <article class="card card--tall" data-type="image" data-title="Ландшафтный дизайн" data-caption="Обычная фотография проекта" data-src="images/photo-6.png">
+        <article class="card" data-type="image" data-title="Ландшафтный дизайн" data-caption="Обычная фотография проекта" data-src="images/photo-6.png">
           <div class="card__media">
             <img src="images/photo-6.png" alt="Ландшафтный дизайн" />
           </div>
@@ -601,6 +644,7 @@
     const modalCaption = document.getElementById('modalCaption');
     const modalClose = document.getElementById('modalClose');
     const cards = document.querySelectorAll('.card');
+    let cleanupCurrentView = null;
 
     function openModal(html, caption) {
       modalContent.innerHTML = html;
@@ -614,6 +658,10 @@
       document.body.classList.remove('modal-open');
       modalContent.innerHTML = '';
       modalCaption.textContent = '';
+      if (typeof cleanupCurrentView === 'function') {
+        cleanupCurrentView();
+        cleanupCurrentView = null;
+      }
     }
 
     modalClose.addEventListener('click', closeModal);
@@ -635,12 +683,14 @@
             <div class="compare-modal__label">До</div>
             <div class="compare-modal__label">После</div>
           </div>
-          <img src="${before}" alt="До">
+          <div class="compare-modal__before">
+            <img src="${before}" alt="До">
+          </div>
           <div class="compare-modal__after" id="compareAfterWrap">
             <img src="${after}" alt="После">
           </div>
-          <div class="compare-modal__handle" id="compareHandle"></div>
-          <div class="compare-modal__knob">↔</div>
+          <div class="compare-modal__line" id="compareLine"></div>
+          <div class="compare-modal__knob" id="compareKnob">↔</div>
         </div>
       `;
     }
@@ -648,8 +698,9 @@
     function initCompareSlider() {
       const compare = document.getElementById('compareModal');
       const afterWrap = document.getElementById('compareAfterWrap');
-      const handle = document.getElementById('compareHandle');
-      if (!compare || !afterWrap || !handle) return;
+      const line = document.getElementById('compareLine');
+      const knob = document.getElementById('compareKnob');
+      if (!compare || !afterWrap || !line || !knob) return;
 
       let active = false;
 
@@ -658,88 +709,190 @@
         let x = clientX - rect.left;
         x = Math.max(0, Math.min(x, rect.width));
         const percent = (x / rect.width) * 100;
-        afterWrap.style.width = percent + '%';
-        handle.style.left = percent + '%';
+        afterWrap.style.clipPath = `inset(0 0 0 ${percent}%)`;
+        line.style.left = percent + '%';
+        knob.style.left = percent + '%';
       };
 
-      const start = (x) => { active = true; setPosition(x); };
-      const move = (x) => { if (active) setPosition(x); };
-      const end = () => { active = false; };
+      const down = (x) => {
+        active = true;
+        setPosition(x);
+      };
+      const move = (x) => {
+        if (active) setPosition(x);
+      };
+      const up = () => { active = false; };
 
-      compare.addEventListener('mousedown', (e) => start(e.clientX));
-      window.addEventListener('mousemove', (e) => move(e.clientX));
-      window.addEventListener('mouseup', end);
+      const onMouseDown = (e) => down(e.clientX);
+      const onMouseMove = (e) => move(e.clientX);
+      const onMouseUp = () => up();
+      const onTouchStart = (e) => down(e.touches[0].clientX);
+      const onTouchMove = (e) => move(e.touches[0].clientX);
+      const onTouchEnd = () => up();
 
-      compare.addEventListener('touchstart', (e) => start(e.touches[0].clientX), { passive: true });
-      compare.addEventListener('touchmove', (e) => move(e.touches[0].clientX), { passive: true });
-      window.addEventListener('touchend', end, { passive: true });
+      compare.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      compare.addEventListener('touchstart', onTouchStart, { passive: true });
+      compare.addEventListener('touchmove', onTouchMove, { passive: true });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+      cleanupCurrentView = () => {
+        compare.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        compare.removeEventListener('touchstart', onTouchStart);
+        compare.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
+      };
     }
 
     function create360View(panorama) {
       return `
-        <div class="viewer360" id="viewer360">
-          <div class="viewer360__track" id="viewer360Track" style="background-image:url('${panorama}')"></div>
-          <div class="viewer360__topnote">Для корректной работы используйте equirectangular панораму 2:1.</div>
-          <div class="viewer360__hint">Тяните влево / вправо</div>
+        <div class="viewer360-real" id="viewer360Root" data-panorama="${panorama}">
+          <div class="viewer360-stage" id="viewer360Stage"></div>
+          <div class="viewer360-note">Настоящий 360° viewer для equirectangular panorama 2:1.</div>
+          <div class="viewer360-hint">Drag to look around • Wheel to zoom</div>
         </div>
       `;
     }
 
     function init360Viewer() {
-      const viewer = document.getElementById('viewer360');
-      const track = document.getElementById('viewer360Track');
-      if (!viewer || !track) return;
+      const root = document.getElementById('viewer360Root');
+      const stage = document.getElementById('viewer360Stage');
 
-      let isDown = false;
-      let startX = 0;
-      let currentX = 0;
-      let velocity = 0;
-      let raf = null;
+      if (!root || !stage || typeof THREE === 'undefined') return;
+
+      const panorama = root.dataset.panorama;
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        stage.clientWidth / stage.clientHeight,
+        1,
+        2000
+      );
+      camera.position.set(0, 0, 0.1);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(stage.clientWidth, stage.clientHeight);
+      stage.appendChild(renderer.domElement);
+
+      const geometry = new THREE.SphereGeometry(500, 96, 64);
+      geometry.scale(-1, 1, 1);
+
+      const textureLoader = new THREE.TextureLoader();
+      const texture = textureLoader.load(panorama, () => {
+        renderer.render(scene, camera);
+      });
+
+      if ('colorSpace' in texture && THREE.SRGBColorSpace) {
+        texture.colorSpace = THREE.SRGBColorSpace;
+      }
+
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+
+      let isUserInteracting = false;
+      let onPointerDownX = 0;
+      let onPointerDownY = 0;
+      let lon = 0;
+      let lat = 0;
+      let onPointerDownLon = 0;
+      let onPointerDownLat = 0;
+      let animationFrame = null;
+
+      function updateCamera() {
+        lat = Math.max(-85, Math.min(85, lat));
+        const phi = THREE.MathUtils.degToRad(90 - lat);
+        const theta = THREE.MathUtils.degToRad(lon);
+
+        const x = 500 * Math.sin(phi) * Math.cos(theta);
+        const y = 500 * Math.cos(phi);
+        const z = 500 * Math.sin(phi) * Math.sin(theta);
+
+        camera.lookAt(x, y, z);
+      }
 
       function render() {
-        track.style.backgroundPosition = `${currentX}px center`;
-        if (!isDown) {
-          currentX += velocity;
-          velocity *= 0.95;
-          if (Math.abs(velocity) < 0.02) velocity = 0;
-        }
-        raf = requestAnimationFrame(render);
+        updateCamera();
+        renderer.render(scene, camera);
+        animationFrame = requestAnimationFrame(render);
       }
 
-      function pointerDown(clientX) {
-        isDown = true;
-        startX = clientX;
+      function pointerDown(clientX, clientY) {
+        isUserInteracting = true;
+        onPointerDownX = clientX;
+        onPointerDownY = clientY;
+        onPointerDownLon = lon;
+        onPointerDownLat = lat;
       }
 
-      function pointerMove(clientX) {
-        if (!isDown) return;
-        const dx = clientX - startX;
-        startX = clientX;
-        currentX += dx;
-        velocity = dx * 0.35;
+      function pointerMove(clientX, clientY) {
+        if (!isUserInteracting) return;
+        lon = (onPointerDownX - clientX) * 0.12 + onPointerDownLon;
+        lat = (clientY - onPointerDownY) * 0.12 + onPointerDownLat;
       }
 
       function pointerUp() {
-        isDown = false;
+        isUserInteracting = false;
       }
 
-      viewer.addEventListener('mousedown', (e) => pointerDown(e.clientX));
-      window.addEventListener('mousemove', (e) => pointerMove(e.clientX));
-      window.addEventListener('mouseup', pointerUp);
+      function onWheel(e) {
+        e.preventDefault();
+        camera.fov += e.deltaY * 0.03;
+        camera.fov = Math.max(40, Math.min(100, camera.fov));
+        camera.updateProjectionMatrix();
+      }
 
-      viewer.addEventListener('touchstart', (e) => pointerDown(e.touches[0].clientX), { passive: true });
-      viewer.addEventListener('touchmove', (e) => pointerMove(e.touches[0].clientX), { passive: true });
-      window.addEventListener('touchend', pointerUp, { passive: true });
+      function onResize() {
+        if (!stage.clientWidth || !stage.clientHeight) return;
+        camera.aspect = stage.clientWidth / stage.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(stage.clientWidth, stage.clientHeight);
+      }
+
+      const onMouseDown = (e) => pointerDown(e.clientX, e.clientY);
+      const onMouseMove = (e) => pointerMove(e.clientX, e.clientY);
+      const onMouseUp = () => pointerUp();
+      const onTouchStart = (e) => pointerDown(e.touches[0].clientX, e.touches[0].clientY);
+      const onTouchMove = (e) => pointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      const onTouchEnd = () => pointerUp();
+
+      root.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      root.addEventListener('touchstart', onTouchStart, { passive: true });
+      root.addEventListener('touchmove', onTouchMove, { passive: true });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+      root.addEventListener('wheel', onWheel, { passive: false });
+      window.addEventListener('resize', onResize);
 
       render();
 
-      const observer = new MutationObserver(() => {
-        if (!modal.classList.contains('open') && raf) {
-          cancelAnimationFrame(raf);
-          observer.disconnect();
+      cleanupCurrentView = () => {
+        root.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        root.removeEventListener('touchstart', onTouchStart);
+        root.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
+        root.removeEventListener('wheel', onWheel);
+        window.removeEventListener('resize', onResize);
+
+        if (animationFrame) cancelAnimationFrame(animationFrame);
+
+        geometry.dispose();
+        material.dispose();
+        texture.dispose();
+        renderer.dispose();
+
+        if (renderer.domElement && renderer.domElement.parentNode) {
+          renderer.domElement.parentNode.removeChild(renderer.domElement);
         }
-      });
-      observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+      };
     }
 
     cards.forEach(card => {
@@ -747,6 +900,8 @@
         const type = card.dataset.type;
         const title = card.dataset.title || '';
         const caption = card.dataset.caption || '';
+
+        cleanupCurrentView = null;
 
         if (type === 'image') {
           openModal(createImageView(card.dataset.src, title), `${title} — ${caption}`);
