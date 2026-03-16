@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Riviera Village — Project View</title>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/build/three.min.js"></script>
+  
   <style>
     :root {
       --bg: #060606;
@@ -427,24 +427,22 @@
       backdrop-filter: blur(8px);
     }
 
-    .pannellum-wrap {
+    .viewer-frame-wrap {
       position: relative;
       width: 100%;
       height: 100%;
       background: #000;
     }
 
-    #viewer360 {
+    .viewer-frame {
       width: 100%;
       height: 100%;
+      border: 0;
+      display: block;
       background: #000;
     }
 
-    .pnlm-container {
-      background: #000 !important;
-    }
-
-    .pannellum-note {
+    .viewer-note {
       position: absolute;
       top: 18px;
       left: 18px;
@@ -456,23 +454,7 @@
       color: #fff;
       backdrop-filter: blur(8px);
       font-size: 13px;
-      max-width: 360px;
-      pointer-events: none;
-    }
-
-    .pannellum-hint {
-      position: absolute;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%);
-      z-index: 8;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.5);
-      border: 1px solid rgba(255,255,255,.1);
-      color: #fff;
-      backdrop-filter: blur(8px);
-      font-size: 13px;
+      max-width: 380px;
       pointer-events: none;
     }
 
@@ -585,7 +567,7 @@
           <div class="card__title">Окно — закрыто / открыто</div>
         </article>
 
-        <article class="card" data-type="viewer360" data-title="Панорама территории" data-caption="Полноценная 360° панорама" data-panorama="images/panorama-360.png">
+        <article class="card" data-type="viewer360" data-title="Панорама территории" data-caption="Полноценная 360° панорама" data-panorama="images/panorama-360.png" data-viewer="viewer360.html">
           <div class="card__media">
             <div class="viewer-thumb" style="background-image:url('images/panorama-360.png')"></div>
           </div>
@@ -734,99 +716,18 @@
       };
     }
 
-    function create360View() {
+    function create360View(viewerFile, panorama) {
+      const src = `${viewerFile}?url=${encodeURIComponent(panorama)}&stereo=0`;
       return `
-        <div class="pannellum-wrap">
-          <div id="viewer360"></div>
-          <div class="pannellum-note">Three.js 360 viewer</div>
-          <div class="pannellum-hint">Тяни мышью чтобы смотреть</div>
+        <div class="viewer-frame-wrap">
+          <iframe class="viewer-frame" src="${src}" allowfullscreen loading="eager"></iframe>
+          <div class="viewer-note">360 viewer загружается из viewer360.html</div>
         </div>
       `;
     }
 
-    function init360Viewer(panorama) {
-      const container = document.getElementById('viewer360');
-      if (!container || typeof THREE === 'undefined') return;
-
-      const scene = new THREE.Scene();
-
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        container.clientWidth / container.clientHeight,
-        1,
-        1000
-      );
-
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      container.appendChild(renderer.domElement);
-
-      const geometry = new THREE.SphereGeometry(500, 60, 40);
-      geometry.scale(-1, 1, 1);
-
-      const texture = new THREE.TextureLoader().load(panorama);
-
-      const material = new THREE.MeshBasicMaterial({ map: texture });
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-
-      camera.position.set(0, 0, 0.1);
-
-      let lon = 0;
-      let lat = 0;
-      let isUserInteracting = false;
-      let onPointerDownLon = 0;
-      let onPointerDownLat = 0;
-      let onPointerDownX = 0;
-      let onPointerDownY = 0;
-
-      function update() {
-        lat = Math.max(-85, Math.min(85, lat));
-        const phi = THREE.MathUtils.degToRad(90 - lat);
-        const theta = THREE.MathUtils.degToRad(lon);
-
-        camera.target = new THREE.Vector3(
-          500 * Math.sin(phi) * Math.cos(theta),
-          500 * Math.cos(phi),
-          500 * Math.sin(phi) * Math.sin(theta)
-        );
-
-        camera.lookAt(camera.target);
-        renderer.render(scene, camera);
-      }
-
-      function animate() {
-        requestAnimationFrame(animate);
-        update();
-      }
-
-      container.addEventListener('mousedown', (event) => {
-        isUserInteracting = true;
-        onPointerDownX = event.clientX;
-        onPointerDownY = event.clientY;
-        onPointerDownLon = lon;
-        onPointerDownLat = lat;
-      });
-
-      document.addEventListener('mousemove', (event) => {
-        if (isUserInteracting) {
-          lon = (onPointerDownX - event.clientX) * 0.1 + onPointerDownLon;
-          lat = (event.clientY - onPointerDownY) * 0.1 + onPointerDownLat;
-        }
-      });
-
-      document.addEventListener('mouseup', () => {
-        isUserInteracting = false;
-      });
-
-      animate();
-
-      cleanupCurrentView = () => {
-        renderer.dispose();
-        geometry.dispose();
-        material.dispose();
-        texture.dispose();
-      };
+    function init360Viewer() {
+      cleanupCurrentView = null;
     }
 
     cards.forEach(card => {
@@ -847,8 +748,8 @@
         }
 
         if (type === 'viewer360') {
-          openModal(create360View(), `${title} — ${caption}`);
-          init360Viewer(card.dataset.panorama);
+          openModal(create360View(card.dataset.viewer || 'viewer360.html', card.dataset.panorama), `${title} — ${caption}`);
+          init360Viewer();
         }
       });
     });
