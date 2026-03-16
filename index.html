@@ -749,10 +749,14 @@
       const viewerEl = document.getElementById('viewer360');
       if (!viewerEl || typeof pannellum === 'undefined') return;
 
+      /* Auto‑orientation preset for Corona Spherical 360 panoramas */
       const initialYaw = 180;
       const initialPitch = 0;
       const initialHfov = 100;
-      const initialHorizonRoll = 0;
+
+      /* Corona panoramas often appear rotated sideways in generic viewers.
+         Apply automatic roll correction so the horizon becomes horizontal. */
+      const initialHorizonRoll = -90;
       const initialHorizonPitch = 0;
 
       const viewer = pannellum.viewer('viewer360', {
