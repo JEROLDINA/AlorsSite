@@ -525,95 +525,77 @@
 
     .color-editor__panel {
       position: absolute;
+      top: 18px;
       right: 18px;
-      bottom: 84px;
       z-index: 12;
-      width: min(320px, calc(100vw - 72px));
-      border-radius: 24px;
+      width: min(520px, calc(100vw - 72px));
+      border-radius: 26px;
       padding: 14px;
-      background: rgba(18,18,18,.88);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 24px 48px rgba(0,0,0,.34);
-      backdrop-filter: blur(14px);
-      color: #f3f3f3;
+      background: rgba(233,228,231,.9);
+      border: 1px solid rgba(26,26,26,.24);
+      box-shadow: 0 20px 44px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      color: #1f1a1f;
     }
 
-    .color-editor__panel-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+    .color-editor__panel-grid {
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
       gap: 12px;
-      margin-bottom: 12px;
+      align-items: stretch;
     }
 
-    .color-editor__panel-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.82);
-    }
-
-    .color-editor__panel-note {
-      font-size: 11px;
-      color: rgba(255,255,255,.55);
-      font-weight: 600;
+    .color-editor__sliders {
+      border-radius: 20px;
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(0,0,0,.14);
+      background: rgba(255,255,255,.28);
     }
 
     .color-editor__buttons {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .color-editor__sliders {
-      border-radius: 18px;
-      padding: 14px;
-      border: 1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.03);
     }
 
     .color-editor__region-btn {
       appearance: none;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 14px;
-      padding: 11px 12px;
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.86);
+      border: 1px solid rgba(0,0,0,.22);
+      border-radius: 18px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.34);
+      color: #262026;
       text-align: left;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+      transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
     }
 
     .color-editor__region-btn:hover {
       transform: translateY(-1px);
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
+      border-color: rgba(0,0,0,.34);
     }
 
     .color-editor__region-btn.is-active {
-      background: rgba(215,155,71,.14);
+      background: #2f2b30;
       color: #fff;
-      border-color: rgba(215,155,71,.6);
-      box-shadow: inset 0 0 0 1px rgba(215,155,71,.22);
+      border-color: #2f2b30;
     }
 
     .color-editor__region-btn[data-region="wood"] {
-      background: rgba(137,103,68,.18);
-      border-color: rgba(171,128,84,.32);
+      background: #a68567;
+      color: #161311;
+      border-color: rgba(70,45,28,.55);
     }
 
     .color-editor__region-btn[data-region="wood"].is-active {
-      background: rgba(171,128,84,.22);
-      border-color: rgba(215,155,71,.7);
+      background: #8f6b4b;
       color: #fff;
+      border-color: #8f6b4b;
     }
 
     .color-editor__slider-group + .color-editor__slider-group {
-      margin-top: 14px;
+      margin-top: 16px;
     }
 
     .color-editor__label-row {
@@ -622,64 +604,63 @@
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 8px;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 600;
     }
 
     .color-editor__value {
       font-variant-numeric: tabular-nums;
-      color: rgba(255,255,255,.7);
+      color: rgba(31,26,31,.74);
       font-weight: 700;
-      font-size: 12px;
     }
 
     .color-editor__range {
       width: 100%;
       appearance: none;
-      height: 8px;
+      height: 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.08);
+      background: rgba(76,57,39,.16);
       outline: none;
-      border: 0;
+      border: 1px solid rgba(0,0,0,.1);
     }
 
     .color-editor__range::-webkit-slider-thumb {
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 28px;
+      height: 28px;
       border-radius: 999px;
-      background: #d79b47;
-      border: 0;
+      background: #a17f61;
+      border: 2px solid rgba(34,20,9,.75);
       cursor: pointer;
-      box-shadow: 0 0 0 4px rgba(215,155,71,.16);
+      box-shadow: 0 4px 10px rgba(0,0,0,.18);
     }
 
     .color-editor__range::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 28px;
+      height: 28px;
       border-radius: 999px;
-      background: #d79b47;
-      border: 0;
+      background: #a17f61;
+      border: 2px solid rgba(34,20,9,.75);
       cursor: pointer;
-      box-shadow: 0 0 0 4px rgba(215,155,71,.16);
+      box-shadow: 0 4px 10px rgba(0,0,0,.18);
     }
 
     .color-editor__actions {
       display: flex;
       justify-content: flex-end;
       margin-top: 12px;
-      gap: 8px;
+      gap: 10px;
     }
 
     .color-editor__action {
       appearance: none;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 12px;
-      background: rgba(255,255,255,.05);
-      color: rgba(255,255,255,.9);
-      padding: 9px 12px;
-      font-size: 12px;
-      font-weight: 700;
+      border: 1px solid rgba(0,0,0,.16);
+      border-radius: 14px;
+      background: rgba(255,255,255,.45);
+      color: #1f1a1f;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
     }
 
@@ -1059,7 +1040,7 @@
     function createColorView() {
       return `
         <div class="color-editor" id="colorEditor">
-          <div class="color-editor__hint">Базове зображення — A1.png. Кожна alpha-маска накладається окремо поверх нього та редагується незалежно.</div>
+          <div class="color-editor__hint">Базове зображення — A1.png. Кожна alpha-маска накладається окремо поверх нього та редагується незалежно. Щоб прибрати шви між масками, краї overlay трохи розширені.</div>
           <div class="color-editor__stage">
             <canvas class="color-editor__canvas" id="colorCanvas"></canvas>
           </div>
@@ -1081,8 +1062,8 @@
                   <span class="color-editor__value" id="tintValue">#FFFFFF</span>
                 </div>
                 <div style="display:flex; gap:10px; align-items:center;">
-                  <input id="tintColor" type="color" value="#ffffff" style="width:56px; height:40px; border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.04); padding:0; overflow:hidden; cursor:pointer;">
-                  <input id="tintText" type="text" value="#FFFFFF" maxlength="7" style="flex:1; height:40px; border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.04); color:#fff; padding:0 12px; font:600 13px Inter, Arial, sans-serif; outline:none;">
+                  <input id="tintColor" type="color" value="#ffffff" style="width:56px; height:40px; border:1px solid rgba(255,255,255,.12); border-radius:10px; background:transparent; padding:0; overflow:hidden; cursor:pointer;">
+                  <input id="tintText" type="text" value="#FFFFFF" maxlength="7" style="flex:1; height:40px; border:1px solid rgba(255,255,255,.12); border-radius:10px; background:rgba(255,255,255,.04); color:#fff; padding:0 12px; font:600 13px Inter, Arial, sans-serif; outline:none;">
                 </div>
               </div>
               <div class="color-editor__slider-group">
@@ -1125,8 +1106,6 @@
       if (!canvas || !editor) return;
 
       const ctx = canvas.getContext('2d');
-      const compositeCanvas = document.createElement('canvas');
-      const compositeCtx = compositeCanvas.getContext('2d');
       const layerCanvas = document.createElement('canvas');
       const layerCtx = layerCanvas.getContext('2d');
       const maskCanvas = document.createElement('canvas');
@@ -1152,8 +1131,7 @@
 
       const regionOrder = ['hpl1', 'hpl2', 'hpl3', 'wood'];
       const assets = {};
-      const EDGE_GROW = 2.25;
-      const CONTENT_GROW = 1.25;
+      const EDGE_GROW = 1.2;
 
       function loadImage(src) {
         return new Promise((resolve, reject) => {
@@ -1199,8 +1177,6 @@
 
         const iw = assets.base.naturalWidth;
         const ih = assets.base.naturalHeight;
-        compositeCanvas.width = iw;
-        compositeCanvas.height = ih;
         layerCanvas.width = iw;
         layerCanvas.height = ih;
         maskCanvas.width = iw;
@@ -1228,76 +1204,59 @@
         rafId = requestAnimationFrame(render);
       }
 
-      function buildMaskFromAlpha(maskImage) {
+      function growMask(maskImage) {
         maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
         maskCtx.globalCompositeOperation = 'source-over';
         maskCtx.filter = 'none';
-
-        // Используем только alpha-канал исходных PNG-масок.
-        // RGB содержимое маски игнорируется, поэтому не будет заливки всего кадра.
         const offsets = [
           [0, 0],
-          [-0.75, 0], [0.75, 0], [0, -0.75], [0, 0.75]
+          [-EDGE_GROW, 0], [EDGE_GROW, 0], [0, -EDGE_GROW], [0, EDGE_GROW],
+          [-EDGE_GROW, -EDGE_GROW], [EDGE_GROW, -EDGE_GROW], [-EDGE_GROW, EDGE_GROW], [EDGE_GROW, EDGE_GROW]
         ];
         for (const [ox, oy] of offsets) {
           maskCtx.drawImage(maskImage, ox, oy, maskCanvas.width, maskCanvas.height);
         }
       }
 
-      function renderOverlayMask(maskImage, state, targetCtx) {
-        buildMaskFromAlpha(maskImage);
+      function renderOverlayMask(maskImage, state) {
+        growMask(maskImage);
 
         layerCtx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
         layerCtx.globalCompositeOperation = 'source-over';
         layerCtx.filter = 'none';
+        layerCtx.drawImage(maskImage, 0, 0, layerCanvas.width, layerCanvas.height);
 
-        // Берём одну и ту же базовую картинку.
-        layerCtx.drawImage(assets.base, 0, 0, layerCanvas.width, layerCanvas.height);
+        layerCtx.globalCompositeOperation = 'multiply';
+        layerCtx.fillStyle = state.tint;
+        layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
 
-        // Оставляем только область маски по её alpha-каналу.
-        layerCtx.globalCompositeOperation = 'destination-in';
-        layerCtx.drawImage(maskCanvas, 0, 0);
+        const filteredCanvas = document.createElement('canvas');
+        filteredCanvas.width = layerCanvas.width;
+        filteredCanvas.height = layerCanvas.height;
+        const filteredCtx = filteredCanvas.getContext('2d');
+        filteredCtx.filter = `brightness(${state.brightness / 100}) saturate(${state.saturation / 100})`;
+        filteredCtx.drawImage(layerCanvas, 0, 0);
 
-        // Tint как мягкая тонировка исходной текстуры.
-        if (String(state.tint || '#ffffff').toLowerCase() !== '#ffffff') {
-          layerCtx.globalCompositeOperation = 'multiply';
-          layerCtx.fillStyle = state.tint;
-          layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
+        filteredCtx.globalCompositeOperation = 'destination-in';
+        filteredCtx.drawImage(maskCanvas, 0, 0);
 
-          layerCtx.globalCompositeOperation = 'screen';
-          layerCtx.globalAlpha = 0.06;
-          layerCtx.fillStyle = state.tint;
-          layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
-          layerCtx.globalAlpha = 1;
-        }
-
-        // Повторно ограничиваем результат alpha-маской.
-        layerCtx.globalCompositeOperation = 'destination-in';
-        layerCtx.drawImage(maskCanvas, 0, 0);
-
-        targetCtx.save();
-        targetCtx.filter = `brightness(${state.brightness / 100}) saturate(${state.saturation / 100})`;
-        targetCtx.drawImage(layerCanvas, 0, 0);
-        targetCtx.restore();
+        ctx.save();
+        drawContain(filteredCanvas, ctx);
+        ctx.restore();
       }
 
       function render() {
         rafId = null;
         if (!assets.base) return;
 
-        compositeCtx.clearRect(0, 0, compositeCanvas.width, compositeCanvas.height);
-        compositeCtx.globalCompositeOperation = 'source-over';
-        compositeCtx.filter = 'none';
-        compositeCtx.drawImage(assets.base, 0, 0, compositeCanvas.width, compositeCanvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawContain(assets.base, ctx);
 
         regionOrder.forEach((region) => {
           const mask = assets[region];
           if (!mask) return;
-          renderOverlayMask(mask, settings[region], compositeCtx);
+          renderOverlayMask(mask, settings[region]);
         });
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawContain(compositeCanvas, ctx);
       }
 
       function handleSliderInput() {

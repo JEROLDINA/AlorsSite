@@ -809,7 +809,7 @@
           <div class="card__media">
             <div class="color-thumb"></div>
           </div>
-          <div class="badge">Tint / B / S</div>
+          <div class="badge">Temp / B / S</div>
           <div class="card__title">Кольори</div>
         </article>
 
@@ -1066,7 +1066,7 @@
           <div class="color-editor__panel">
             <div class="color-editor__panel-head">
               <div class="color-editor__panel-title">Material editor</div>
-              <div class="color-editor__panel-note">Tint / Brightness / Saturation</div>
+              <div class="color-editor__panel-note">Temperature / Brightness / Saturation</div>
             </div>
             <div class="color-editor__buttons">
               <button class="color-editor__region-btn is-active" type="button" data-region="hpl1">HPL Плитка 1</button>
@@ -1077,13 +1077,10 @@
             <div class="color-editor__sliders">
               <div class="color-editor__slider-group">
                 <div class="color-editor__label-row">
-                  <span>Tint</span>
-                  <span class="color-editor__value" id="tintValue">#FFFFFF</span>
+                  <span>Temperature</span>
+                  <span class="color-editor__value" id="temperatureValue">0</span>
                 </div>
-                <div style="display:flex; gap:10px; align-items:center;">
-                  <input id="tintColor" type="color" value="#ffffff" style="width:56px; height:40px; border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.04); padding:0; overflow:hidden; cursor:pointer;">
-                  <input id="tintText" type="text" value="#FFFFFF" maxlength="7" style="flex:1; height:40px; border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.04); color:#fff; padding:0 12px; font:600 13px Inter, Arial, sans-serif; outline:none;">
-                </div>
+                <input class="color-editor__range" id="temperatureRange" type="range" min="-100" max="100" step="1" value="0">
               </div>
               <div class="color-editor__slider-group">
                 <div class="color-editor__label-row">
@@ -1112,9 +1109,8 @@
     function initColorEditor() {
       const canvas = document.getElementById('colorCanvas');
       const editor = document.getElementById('colorEditor');
-      const tintColor = document.getElementById('tintColor');
-      const tintText = document.getElementById('tintText');
-      const tintValue = document.getElementById('tintValue');
+      const temperatureRange = document.getElementById('temperatureRange');
+      const temperatureValue = document.getElementById('temperatureValue');
       const brightnessRange = document.getElementById('brightnessRange');
       const saturationRange = document.getElementById('saturationRange');
       const brightnessValue = document.getElementById('brightnessValue');
@@ -1134,7 +1130,7 @@
       let activeRegion = 'hpl1';
       let rafId = null;
 
-      const defaultSettings = () => ({ tint: '#ffffff', brightness: 100, saturation: 100 });
+      const defaultSettings = () => ({ temperature: 0, brightness: 100, saturation: 100 });
       const settings = {
         hpl1: defaultSettings(),
         hpl2: defaultSettings(),
@@ -1164,18 +1160,10 @@
         });
       }
 
-      function normalizeHex(value) {
-        let hex = String(value || '').trim().toUpperCase();
-        if (!hex.startsWith('#')) hex = '#' + hex;
-        if (/^#[0-9A-F]{6}$/.test(hex)) return hex;
-        return null;
-      }
-
       function syncActiveControls() {
         const state = settings[activeRegion];
-        tintColor.value = state.tint;
-        tintText.value = state.tint.toUpperCase();
-        tintValue.textContent = state.tint.toUpperCase();
+        temperatureRange.value = state.temperature;
+        temperatureValue.textContent = `${state.temperature > 0 ? '+' : ''}${state.temperature}`;
         brightnessRange.value = state.brightness;
         saturationRange.value = state.saturation;
         brightnessValue.textContent = `${state.brightness}%`;
@@ -1228,16 +1216,14 @@
         rafId = requestAnimationFrame(render);
       }
 
-      function buildMaskFromAlpha(maskImage) {
+      function growMask(maskImage) {
         maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
         maskCtx.globalCompositeOperation = 'source-over';
         maskCtx.filter = 'none';
-
-        // Используем только alpha-канал исходных PNG-масок.
-        // RGB содержимое маски игнорируется, поэтому не будет заливки всего кадра.
         const offsets = [
           [0, 0],
-          [-0.75, 0], [0.75, 0], [0, -0.75], [0, 0.75]
+          [-EDGE_GROW, 0], [EDGE_GROW, 0], [0, -EDGE_GROW], [0, EDGE_GROW],
+          [-EDGE_GROW, -EDGE_GROW], [EDGE_GROW, -EDGE_GROW], [-EDGE_GROW, EDGE_GROW], [EDGE_GROW, EDGE_GROW]
         ];
         for (const [ox, oy] of offsets) {
           maskCtx.drawImage(maskImage, ox, oy, maskCanvas.width, maskCanvas.height);
@@ -1245,40 +1231,38 @@
       }
 
       function renderOverlayMask(maskImage, state, targetCtx) {
-        buildMaskFromAlpha(maskImage);
+        growMask(maskImage);
 
         layerCtx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
         layerCtx.globalCompositeOperation = 'source-over';
         layerCtx.filter = 'none';
 
-        // Берём одну и ту же базовую картинку.
+        // Берём оригинальные пиксели из A1 и ограничиваем их маской.
         layerCtx.drawImage(assets.base, 0, 0, layerCanvas.width, layerCanvas.height);
-
-        // Оставляем только область маски по её alpha-каналу.
         layerCtx.globalCompositeOperation = 'destination-in';
         layerCtx.drawImage(maskCanvas, 0, 0);
 
-        // Tint как мягкая тонировка исходной текстуры.
-        if (String(state.tint || '#ffffff').toLowerCase() !== '#ffffff') {
-          layerCtx.globalCompositeOperation = 'multiply';
-          layerCtx.fillStyle = state.tint;
-          layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
-
-          layerCtx.globalCompositeOperation = 'screen';
-          layerCtx.globalAlpha = 0.06;
-          layerCtx.fillStyle = state.tint;
-          layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
-          layerCtx.globalAlpha = 1;
-        }
-
-        // Повторно ограничиваем результат alpha-маской.
-        layerCtx.globalCompositeOperation = 'destination-in';
-        layerCtx.drawImage(maskCanvas, 0, 0);
-
+        // Основной слой с brightness / saturation.
         targetCtx.save();
         targetCtx.filter = `brightness(${state.brightness / 100}) saturate(${state.saturation / 100})`;
         targetCtx.drawImage(layerCanvas, 0, 0);
         targetCtx.restore();
+
+        // Temperature как мягкая тёплая / холодная тонировка поверх исходной текстуры.
+        const temp = Number(state.temperature || 0);
+        if (temp !== 0) {
+          const strength = Math.min(Math.abs(temp) / 100, 1);
+          targetCtx.save();
+          targetCtx.globalAlpha = strength * 0.24;
+          targetCtx.globalCompositeOperation = 'soft-light';
+          targetCtx.fillStyle = temp > 0 ? '#ffb46a' : '#6ab7ff';
+          targetCtx.fillRect(0, 0, targetCtx.canvas.width, targetCtx.canvas.height);
+
+          targetCtx.globalCompositeOperation = 'destination-in';
+          targetCtx.globalAlpha = 1;
+          targetCtx.drawImage(maskCanvas, 0, 0);
+          targetCtx.restore();
+        }
       }
 
       function render() {
@@ -1302,19 +1286,10 @@
 
       function handleSliderInput() {
         const state = settings[activeRegion];
+        state.temperature = Number(temperatureRange.value);
         state.brightness = Number(brightnessRange.value);
         state.saturation = Number(saturationRange.value);
         syncActiveControls();
-        scheduleRender();
-      }
-
-      function applyTintValue(rawValue, fromColorPicker = false) {
-        const hex = normalizeHex(rawValue);
-        if (!hex) return;
-        settings[activeRegion].tint = hex.toLowerCase();
-        if (!fromColorPicker) tintColor.value = hex;
-        tintText.value = hex;
-        tintValue.textContent = hex;
         scheduleRender();
       }
 
@@ -1325,15 +1300,7 @@
         });
       });
 
-      tintColor.addEventListener('input', () => applyTintValue(tintColor.value, true));
-      tintText.addEventListener('change', () => {
-        const hex = normalizeHex(tintText.value);
-        tintText.value = hex || settings[activeRegion].tint.toUpperCase();
-        if (hex) applyTintValue(hex);
-      });
-      tintText.addEventListener('blur', () => {
-        tintText.value = settings[activeRegion].tint.toUpperCase();
-      });
+      temperatureRange.addEventListener('input', handleSliderInput);
       brightnessRange.addEventListener('input', handleSliderInput);
       saturationRange.addEventListener('input', handleSliderInput);
 

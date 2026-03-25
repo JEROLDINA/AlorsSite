@@ -471,39 +471,50 @@
     .color-thumb {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%), url('images/A1.png') center / cover no-repeat;
+      background: linear-gradient(180deg, rgba(0,0,0,.02) 42%, rgba(0,0,0,.44) 100%), url('images/A1.png') center / cover no-repeat;
     }
 
     .color-thumb::before {
-      content: "";
+      content: "Кольори";
       position: absolute;
-      right: 22px;
-      top: 22px;
-      width: 210px;
-      height: 126px;
-      border-radius: 22px;
-      background: rgba(238,232,235,.88);
-      border: 1px solid rgba(10,10,10,.28);
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
-      backdrop-filter: blur(8px);
+      left: 18px;
+      top: 18px;
+      z-index: 2;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(10,10,10,.6);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
     }
 
     .color-thumb::after {
-      content: "H · B · S";
+      content: "H / B / S";
       position: absolute;
-      right: 92px;
-      top: 72px;
-      color: rgba(20,20,20,.72);
-      font-size: 22px;
+      right: 18px;
+      top: 18px;
+      z-index: 2;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(10,10,10,.6);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: .14em;
     }
 
     .color-editor {
       position: relative;
       width: 100%;
       height: 100%;
-      background: #050505;
+      background: #040404;
       overflow: hidden;
     }
 
@@ -525,95 +536,126 @@
 
     .color-editor__panel {
       position: absolute;
-      right: 18px;
-      bottom: 84px;
+      right: 20px;
+      bottom: 78px;
       z-index: 12;
-      width: min(320px, calc(100vw - 72px));
+      width: min(430px, calc(100vw - 40px));
       border-radius: 24px;
-      padding: 14px;
-      background: rgba(18,18,18,.88);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 24px 48px rgba(0,0,0,.34);
-      backdrop-filter: blur(14px);
+      padding: 18px;
+      background: rgba(9,9,9,.78);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 24px 54px rgba(0,0,0,.34);
+      backdrop-filter: blur(16px);
       color: #f3f3f3;
     }
 
     .color-editor__panel-head {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .color-editor__panel-title {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 14px;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: rgba(255,255,255,.82);
+      color: rgba(255,255,255,.58);
+      font-weight: 700;
     }
 
     .color-editor__panel-note {
-      font-size: 11px;
-      color: rgba(255,255,255,.55);
-      font-weight: 600;
+      font-size: 13px;
+      color: rgba(255,255,255,.7);
     }
 
     .color-editor__buttons {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 14px;
+    }
+
+    .color-editor__region-btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      padding: 14px 14px;
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.84);
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .color-editor__region-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+
+    .color-editor__region-btn.is-active {
+      background: rgba(215,155,71,.18);
+      color: #fff;
+      border-color: rgba(215,155,71,.62);
+      box-shadow: inset 0 0 0 1px rgba(215,155,71,.18);
     }
 
     .color-editor__sliders {
       border-radius: 18px;
       padding: 14px;
-      border: 1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.03);
-    }
-
-    .color-editor__region-btn {
-      appearance: none;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 14px;
-      padding: 11px 12px;
+      border: 1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.86);
-      text-align: left;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-
-    .color-editor__region-btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-    }
-
-    .color-editor__region-btn.is-active {
-      background: rgba(215,155,71,.14);
-      color: #fff;
-      border-color: rgba(215,155,71,.6);
-      box-shadow: inset 0 0 0 1px rgba(215,155,71,.22);
-    }
-
-    .color-editor__region-btn[data-region="wood"] {
-      background: rgba(137,103,68,.18);
-      border-color: rgba(171,128,84,.32);
-    }
-
-    .color-editor__region-btn[data-region="wood"].is-active {
-      background: rgba(171,128,84,.22);
-      border-color: rgba(215,155,71,.7);
-      color: #fff;
     }
 
     .color-editor__slider-group + .color-editor__slider-group {
       margin-top: 14px;
+    }
+
+    .color-editor__tint-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .color-editor__color-input {
+      width: 56px;
+      min-width: 56px;
+      height: 40px;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .color-editor__color-input::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-editor__color-input::-webkit-color-swatch,
+    .color-editor__color-input::-moz-color-swatch {
+      border: 0;
+      border-radius: 10px;
+    }
+
+    .color-editor__color-code {
+      min-width: 82px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
     }
 
     .color-editor__label-row {
@@ -622,79 +664,89 @@
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 8px;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,.88);
     }
 
     .color-editor__value {
       font-variant-numeric: tabular-nums;
-      color: rgba(255,255,255,.7);
+      color: rgba(255,255,255,.56);
       font-weight: 700;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .color-editor__range {
       width: 100%;
       appearance: none;
-      height: 8px;
+      height: 10px;
       border-radius: 999px;
       background: rgba(255,255,255,.08);
       outline: none;
-      border: 0;
+      border: 1px solid rgba(255,255,255,.06);
     }
 
     .color-editor__range::-webkit-slider-thumb {
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
       border-radius: 999px;
       background: #d79b47;
-      border: 0;
+      border: 2px solid rgba(0,0,0,.55);
       cursor: pointer;
-      box-shadow: 0 0 0 4px rgba(215,155,71,.16);
+      box-shadow: 0 4px 12px rgba(0,0,0,.28);
     }
 
     .color-editor__range::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
       border-radius: 999px;
       background: #d79b47;
-      border: 0;
+      border: 2px solid rgba(0,0,0,.55);
       cursor: pointer;
-      box-shadow: 0 0 0 4px rgba(215,155,71,.16);
+      box-shadow: 0 4px 12px rgba(0,0,0,.28);
     }
 
     .color-editor__actions {
       display: flex;
       justify-content: flex-end;
-      margin-top: 12px;
-      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      gap: 10px;
     }
 
     .color-editor__action {
       appearance: none;
-      border: 1px solid rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: 12px;
-      background: rgba(255,255,255,.05);
+      background: rgba(255,255,255,.06);
       color: rgba(255,255,255,.9);
-      padding: 9px 12px;
-      font-size: 12px;
-      font-weight: 700;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .color-editor__action:hover {
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.18);
     }
 
     .color-editor__hint {
       position: absolute;
-      left: 18px;
-      top: 18px;
+      left: 20px;
+      top: 20px;
       z-index: 11;
-      padding: 10px 14px;
+      max-width: 340px;
+      padding: 11px 14px;
       border-radius: 14px;
-      background: rgba(0,0,0,.4);
+      background: rgba(0,0,0,.46);
       border: 1px solid rgba(255,255,255,.1);
-      color: rgba(255,255,255,.88);
+      color: rgba(255,255,255,.84);
       font-size: 13px;
-      backdrop-filter: blur(8px);
+      line-height: 1.45;
+      backdrop-filter: blur(10px);
     }
 
 
@@ -715,6 +767,21 @@
       }
       .hero__inner {
         padding: 20px;
+      }
+      .color-editor__panel {
+        left: 14px;
+        right: 14px;
+        bottom: 74px;
+        width: auto;
+      }
+      .color-editor__buttons {
+        grid-template-columns: 1fr 1fr;
+      }
+      .color-editor__hint {
+        left: 14px;
+        right: 14px;
+        top: 14px;
+        max-width: none;
       }
     }
 
@@ -809,7 +876,7 @@
           <div class="card__media">
             <div class="color-thumb"></div>
           </div>
-          <div class="badge">Tint / B / S</div>
+          <div class="badge">H / B / S</div>
           <div class="card__title">Кольори</div>
         </article>
 
@@ -1080,9 +1147,9 @@
                   <span>Tint</span>
                   <span class="color-editor__value" id="tintValue">#FFFFFF</span>
                 </div>
-                <div style="display:flex; gap:10px; align-items:center;">
-                  <input id="tintColor" type="color" value="#ffffff" style="width:56px; height:40px; border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.04); padding:0; overflow:hidden; cursor:pointer;">
-                  <input id="tintText" type="text" value="#FFFFFF" maxlength="7" style="flex:1; height:40px; border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.04); color:#fff; padding:0 12px; font:600 13px Inter, Arial, sans-serif; outline:none;">
+                <div class="color-editor__tint-row">
+                  <input class="color-editor__color-input" id="tintInput" type="color" value="#ffffff">
+                  <div class="color-editor__color-code" id="tintCode">#FFFFFF</div>
                 </div>
               </div>
               <div class="color-editor__slider-group">
@@ -1090,7 +1157,7 @@
                   <span>Brightness</span>
                   <span class="color-editor__value" id="brightnessValue">100%</span>
                 </div>
-                <input class="color-editor__range" id="brightnessRange" type="range" min="0" max="500" step="1" value="100">
+                <input class="color-editor__range" id="brightnessRange" type="range" min="50" max="250" step="1" value="100">
               </div>
               <div class="color-editor__slider-group">
                 <div class="color-editor__label-row">
@@ -1112,8 +1179,8 @@
     function initColorEditor() {
       const canvas = document.getElementById('colorCanvas');
       const editor = document.getElementById('colorEditor');
-      const tintColor = document.getElementById('tintColor');
-      const tintText = document.getElementById('tintText');
+      const tintInput = document.getElementById('tintInput');
+      const tintCode = document.getElementById('tintCode');
       const tintValue = document.getElementById('tintValue');
       const brightnessRange = document.getElementById('brightnessRange');
       const saturationRange = document.getElementById('saturationRange');
@@ -1125,12 +1192,6 @@
       if (!canvas || !editor) return;
 
       const ctx = canvas.getContext('2d');
-      const compositeCanvas = document.createElement('canvas');
-      const compositeCtx = compositeCanvas.getContext('2d');
-      const layerCanvas = document.createElement('canvas');
-      const layerCtx = layerCanvas.getContext('2d');
-      const maskCanvas = document.createElement('canvas');
-      const maskCtx = maskCanvas.getContext('2d');
       let activeRegion = 'hpl1';
       let rafId = null;
 
@@ -1152,8 +1213,6 @@
 
       const regionOrder = ['hpl1', 'hpl2', 'hpl3', 'wood'];
       const assets = {};
-      const EDGE_GROW = 2.25;
-      const CONTENT_GROW = 1.25;
 
       function loadImage(src) {
         return new Promise((resolve, reject) => {
@@ -1164,17 +1223,10 @@
         });
       }
 
-      function normalizeHex(value) {
-        let hex = String(value || '').trim().toUpperCase();
-        if (!hex.startsWith('#')) hex = '#' + hex;
-        if (/^#[0-9A-F]{6}$/.test(hex)) return hex;
-        return null;
-      }
-
       function syncActiveControls() {
         const state = settings[activeRegion];
-        tintColor.value = state.tint;
-        tintText.value = state.tint.toUpperCase();
+        tintInput.value = state.tint;
+        tintCode.textContent = state.tint.toUpperCase();
         tintValue.textContent = state.tint.toUpperCase();
         brightnessRange.value = state.brightness;
         saturationRange.value = state.saturation;
@@ -1197,14 +1249,6 @@
         canvas.style.width = rect.width + 'px';
         canvas.style.height = rect.height + 'px';
 
-        const iw = assets.base.naturalWidth;
-        const ih = assets.base.naturalHeight;
-        compositeCanvas.width = iw;
-        compositeCanvas.height = ih;
-        layerCanvas.width = iw;
-        layerCanvas.height = ih;
-        maskCanvas.width = iw;
-        maskCanvas.height = ih;
         render();
       }
 
@@ -1218,8 +1262,6 @@
         const dh = ih * scale;
         const dx = (cw - dw) * 0.5;
         const dy = (ch - dh) * 0.5;
-        targetCtx.imageSmoothingEnabled = true;
-        targetCtx.imageSmoothingQuality = 'high';
         targetCtx.drawImage(image, dx, dy, dw, dh);
       }
 
@@ -1228,93 +1270,53 @@
         rafId = requestAnimationFrame(render);
       }
 
-      function buildMaskFromAlpha(maskImage) {
-        maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
-        maskCtx.globalCompositeOperation = 'source-over';
-        maskCtx.filter = 'none';
+      function drawProcessedMask(maskImage, state) {
+        const offscreen = document.createElement('canvas');
+        offscreen.width = canvas.width;
+        offscreen.height = canvas.height;
+        const offCtx = offscreen.getContext('2d');
+        if (!offCtx) return;
 
-        // Используем только alpha-канал исходных PNG-масок.
-        // RGB содержимое маски игнорируется, поэтому не будет заливки всего кадра.
-        const offsets = [
-          [0, 0],
-          [-0.75, 0], [0.75, 0], [0, -0.75], [0, 0.75]
-        ];
-        for (const [ox, oy] of offsets) {
-          maskCtx.drawImage(maskImage, ox, oy, maskCanvas.width, maskCanvas.height);
-        }
-      }
+        offCtx.clearRect(0, 0, offscreen.width, offscreen.height);
 
-      function renderOverlayMask(maskImage, state, targetCtx) {
-        buildMaskFromAlpha(maskImage);
+        // 1) Рисуем саму alpha-карту как отдельный слой.
+        drawContain(maskImage, offCtx);
 
-        layerCtx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
-        layerCtx.globalCompositeOperation = 'source-over';
-        layerCtx.filter = 'none';
+        // 2) Подкрашиваем ТОЛЬКО её непрозрачные пиксели.
+        offCtx.globalCompositeOperation = 'source-atop';
+        offCtx.fillStyle = state.tint;
+        offCtx.fillRect(0, 0, offscreen.width, offscreen.height);
+        offCtx.globalCompositeOperation = 'multiply';
+        drawContain(maskImage, offCtx);
+        offCtx.globalCompositeOperation = 'source-over';
 
-        // Берём одну и ту же базовую картинку.
-        layerCtx.drawImage(assets.base, 0, 0, layerCanvas.width, layerCanvas.height);
-
-        // Оставляем только область маски по её alpha-каналу.
-        layerCtx.globalCompositeOperation = 'destination-in';
-        layerCtx.drawImage(maskCanvas, 0, 0);
-
-        // Tint как мягкая тонировка исходной текстуры.
-        if (String(state.tint || '#ffffff').toLowerCase() !== '#ffffff') {
-          layerCtx.globalCompositeOperation = 'multiply';
-          layerCtx.fillStyle = state.tint;
-          layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
-
-          layerCtx.globalCompositeOperation = 'screen';
-          layerCtx.globalAlpha = 0.06;
-          layerCtx.fillStyle = state.tint;
-          layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
-          layerCtx.globalAlpha = 1;
-        }
-
-        // Повторно ограничиваем результат alpha-маской.
-        layerCtx.globalCompositeOperation = 'destination-in';
-        layerCtx.drawImage(maskCanvas, 0, 0);
-
-        targetCtx.save();
-        targetCtx.filter = `brightness(${state.brightness / 100}) saturate(${state.saturation / 100})`;
-        targetCtx.drawImage(layerCanvas, 0, 0);
-        targetCtx.restore();
+        // 3) Уже готовый слой мягко усиливаем по яркости/насыщенности.
+        ctx.save();
+        ctx.filter = `brightness(${state.brightness / 100}) saturate(${state.saturation / 100})`;
+        ctx.drawImage(offscreen, 0, 0);
+        ctx.restore();
       }
 
       function render() {
         rafId = null;
         if (!assets.base) return;
 
-        compositeCtx.clearRect(0, 0, compositeCanvas.width, compositeCanvas.height);
-        compositeCtx.globalCompositeOperation = 'source-over';
-        compositeCtx.filter = 'none';
-        compositeCtx.drawImage(assets.base, 0, 0, compositeCanvas.width, compositeCanvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawContain(assets.base, ctx);
 
         regionOrder.forEach((region) => {
           const mask = assets[region];
           if (!mask) return;
-          renderOverlayMask(mask, settings[region], compositeCtx);
+          drawProcessedMask(mask, settings[region]);
         });
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawContain(compositeCanvas, ctx);
       }
 
       function handleSliderInput() {
         const state = settings[activeRegion];
+        state.tint = tintInput.value;
         state.brightness = Number(brightnessRange.value);
         state.saturation = Number(saturationRange.value);
         syncActiveControls();
-        scheduleRender();
-      }
-
-      function applyTintValue(rawValue, fromColorPicker = false) {
-        const hex = normalizeHex(rawValue);
-        if (!hex) return;
-        settings[activeRegion].tint = hex.toLowerCase();
-        if (!fromColorPicker) tintColor.value = hex;
-        tintText.value = hex;
-        tintValue.textContent = hex;
         scheduleRender();
       }
 
@@ -1325,15 +1327,7 @@
         });
       });
 
-      tintColor.addEventListener('input', () => applyTintValue(tintColor.value, true));
-      tintText.addEventListener('change', () => {
-        const hex = normalizeHex(tintText.value);
-        tintText.value = hex || settings[activeRegion].tint.toUpperCase();
-        if (hex) applyTintValue(hex);
-      });
-      tintText.addEventListener('blur', () => {
-        tintText.value = settings[activeRegion].tint.toUpperCase();
-      });
+      tintInput.addEventListener('input', handleSliderInput);
       brightnessRange.addEventListener('input', handleSliderInput);
       saturationRange.addEventListener('input', handleSliderInput);
 

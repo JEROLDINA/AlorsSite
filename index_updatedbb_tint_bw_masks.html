@@ -1144,16 +1144,14 @@
 
       const imageMap = {
         base: 'images/A1.png',
-        hpl1: 'images/HPL1alpha.png',
-        hpl2: 'images/HPL2alpha.png',
-        hpl3: 'images/HPL3alpha.png',
-        wood: 'images/Woodalpha.png'
+        hpl1: 'images/HPL1alpha2.png',
+        hpl2: 'images/HPL2alpha2.png',
+        hpl3: 'images/HPL3alpha2.png',
+        wood: 'images/Woodalpha2.png'
       };
 
       const regionOrder = ['hpl1', 'hpl2', 'hpl3', 'wood'];
       const assets = {};
-      const EDGE_GROW = 2.25;
-      const CONTENT_GROW = 1.25;
 
       function loadImage(src) {
         return new Promise((resolve, reject) => {
@@ -1228,50 +1226,41 @@
         rafId = requestAnimationFrame(render);
       }
 
-      function buildMaskFromAlpha(maskImage) {
+      function buildSelectionMask(maskImage) {
         maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
         maskCtx.globalCompositeOperation = 'source-over';
+        maskCtx.filter = 'grayscale(1) invert(1) contrast(5)';
+        maskCtx.drawImage(maskImage, 0, 0, maskCanvas.width, maskCanvas.height);
         maskCtx.filter = 'none';
-
-        // Используем только alpha-канал исходных PNG-масок.
-        // RGB содержимое маски игнорируется, поэтому не будет заливки всего кадра.
-        const offsets = [
-          [0, 0],
-          [-0.75, 0], [0.75, 0], [0, -0.75], [0, 0.75]
-        ];
-        for (const [ox, oy] of offsets) {
-          maskCtx.drawImage(maskImage, ox, oy, maskCanvas.width, maskCanvas.height);
-        }
       }
 
       function renderOverlayMask(maskImage, state, targetCtx) {
-        buildMaskFromAlpha(maskImage);
+        buildSelectionMask(maskImage);
 
+        // Берём одну и ту же базовую A1 и корректируем её только внутри чёрной зоны маски.
         layerCtx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
         layerCtx.globalCompositeOperation = 'source-over';
         layerCtx.filter = 'none';
-
-        // Берём одну и ту же базовую картинку.
         layerCtx.drawImage(assets.base, 0, 0, layerCanvas.width, layerCanvas.height);
 
-        // Оставляем только область маски по её alpha-каналу.
+        // Оставляем только нужный участок.
         layerCtx.globalCompositeOperation = 'destination-in';
         layerCtx.drawImage(maskCanvas, 0, 0);
 
-        // Tint как мягкая тонировка исходной текстуры.
+        // Tint как тонировка исходной текстуры, а не отдельная картинка поверх.
         if (String(state.tint || '#ffffff').toLowerCase() !== '#ffffff') {
           layerCtx.globalCompositeOperation = 'multiply';
           layerCtx.fillStyle = state.tint;
           layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
 
           layerCtx.globalCompositeOperation = 'screen';
-          layerCtx.globalAlpha = 0.06;
+          layerCtx.globalAlpha = 0.08;
           layerCtx.fillStyle = state.tint;
           layerCtx.fillRect(0, 0, layerCanvas.width, layerCanvas.height);
           layerCtx.globalAlpha = 1;
         }
 
-        // Повторно ограничиваем результат alpha-маской.
+        // Повторно ограничиваемся маской, чтобы не было ореолов.
         layerCtx.globalCompositeOperation = 'destination-in';
         layerCtx.drawImage(maskCanvas, 0, 0);
 
