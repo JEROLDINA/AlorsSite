@@ -467,7 +467,245 @@
       background: #000;
     }
 
-    
+
+    .color-thumb {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,.02) 42%, rgba(0,0,0,.44) 100%), url('images/A1.png') center / cover no-repeat;
+    }
+
+    .color-thumb::before {
+      content: "Кольори";
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      z-index: 2;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(10,10,10,.6);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .color-thumb::after {
+      content: "H / B / S";
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 2;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(10,10,10,.6);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .color-editor {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #040404;
+      overflow: hidden;
+    }
+
+    .color-editor__stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .color-editor__canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .color-editor__panel {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      z-index: 12;
+      width: min(430px, calc(100vw - 40px));
+      border-radius: 24px;
+      padding: 18px;
+      background: rgba(9,9,9,.78);
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 24px 54px rgba(0,0,0,.34);
+      backdrop-filter: blur(16px);
+      color: #f3f3f3;
+    }
+
+    .color-editor__panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .color-editor__panel-title {
+      font-size: 14px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.58);
+      font-weight: 700;
+    }
+
+    .color-editor__panel-note {
+      font-size: 13px;
+      color: rgba(255,255,255,.7);
+    }
+
+    .color-editor__buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .color-editor__region-btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      padding: 14px 14px;
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.84);
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .color-editor__region-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+
+    .color-editor__region-btn.is-active {
+      background: rgba(215,155,71,.18);
+      color: #fff;
+      border-color: rgba(215,155,71,.62);
+      box-shadow: inset 0 0 0 1px rgba(215,155,71,.18);
+    }
+
+    .color-editor__sliders {
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+
+    .color-editor__slider-group + .color-editor__slider-group {
+      margin-top: 14px;
+    }
+
+    .color-editor__label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,.88);
+    }
+
+    .color-editor__value {
+      font-variant-numeric: tabular-nums;
+      color: rgba(255,255,255,.56);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .color-editor__range {
+      width: 100%;
+      appearance: none;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      outline: none;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .color-editor__range::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #d79b47;
+      border: 2px solid rgba(0,0,0,.55);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,.28);
+    }
+
+    .color-editor__range::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #d79b47;
+      border: 2px solid rgba(0,0,0,.55);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,.28);
+    }
+
+    .color-editor__actions {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      gap: 10px;
+    }
+
+    .color-editor__action {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.9);
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .color-editor__action:hover {
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .color-editor__hint {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      z-index: 11;
+      max-width: 340px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.46);
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.84);
+      font-size: 13px;
+      line-height: 1.45;
+      backdrop-filter: blur(10px);
+    }
+
 
     @media (max-width: 1200px) {
       .gallery { grid-template-columns: 1fr 1fr; }
@@ -486,6 +724,21 @@
       }
       .hero__inner {
         padding: 20px;
+      }
+      .color-editor__panel {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        width: auto;
+      }
+      .color-editor__buttons {
+        grid-template-columns: 1fr 1fr;
+      }
+      .color-editor__hint {
+        left: 14px;
+        right: 14px;
+        top: 14px;
+        max-width: none;
       }
     }
 
@@ -574,6 +827,14 @@
           </div>
           <div class="badge">Порівняння</div>
           <div class="card__title">Фронтальний вид</div>
+        </article>
+
+        <article class="card" data-type="colors" data-title="Кольори" data-caption="Налаштування HPL та дерева через alpha-маски" data-src="images/A1.png">
+          <div class="card__media">
+            <div class="color-thumb"></div>
+          </div>
+          <div class="badge">H / B / S</div>
+          <div class="card__title">Кольори</div>
         </article>
 
         <article class="card" data-type="viewer360" data-title="Панорама тераса" data-caption="360° панорама" data-panorama="images/360one.png" data-viewer="viewer360.html">
@@ -705,6 +966,11 @@
         openModal(create360View(card.dataset.viewer || 'viewer360.html', card.dataset.panorama), `${title} — ${caption}`);
         init360Viewer();
       }
+
+      if (type === 'colors') {
+        openModal(createColorView(), `${title} — ${caption}`);
+        initColorEditor();
+      }
     }
 
     function goToAdjacentCard(direction) {
@@ -741,7 +1007,7 @@
             <img src="${before}" alt="До">
           </div>
           <div class="compare-modal__after" id="compareAfterWrap">
-            <img src="${after}" alt="После">
+            <img src="${after}" alt="Після">
           </div>
           <div class="compare-modal__line" id="compareLine"></div>
           <div class="compare-modal__knob" id="compareKnob">↔</div>
@@ -812,6 +1078,246 @@
 
     function init360Viewer() {
       cleanupCurrentView = null;
+    }
+
+    function createColorView() {
+      return `
+        <div class="color-editor" id="colorEditor">
+          <div class="color-editor__hint">Тепер корекція застосовується лише до окремих overlay-масок поверх A1.png, а не до всієї вирізаної ділянки.</div>
+          <div class="color-editor__stage">
+            <canvas class="color-editor__canvas" id="colorCanvas"></canvas>
+          </div>
+          <div class="color-editor__panel">
+            <div class="color-editor__panel-head">
+              <div class="color-editor__panel-title">Material editor</div>
+              <div class="color-editor__panel-note">Мʼяка корекція H / B / S</div>
+            </div>
+            <div class="color-editor__buttons">
+              <button class="color-editor__region-btn is-active" type="button" data-region="hpl1">HPL Плитка 1</button>
+              <button class="color-editor__region-btn" type="button" data-region="hpl2">HPL Плитка 2</button>
+              <button class="color-editor__region-btn" type="button" data-region="hpl3">HPL Плитка 3</button>
+              <button class="color-editor__region-btn" type="button" data-region="wood">Дерево</button>
+            </div>
+            <div class="color-editor__sliders">
+              <div class="color-editor__slider-group">
+                <div class="color-editor__label-row">
+                  <span>Hue</span>
+                  <span class="color-editor__value" id="hueValue">0°</span>
+                </div>
+                <input class="color-editor__range" id="hueRange" type="range" min="-40" max="40" step="1" value="0">
+              </div>
+              <div class="color-editor__slider-group">
+                <div class="color-editor__label-row">
+                  <span>Brightness</span>
+                  <span class="color-editor__value" id="brightnessValue">100%</span>
+                </div>
+                <input class="color-editor__range" id="brightnessRange" type="range" min="85" max="115" step="1" value="100">
+              </div>
+              <div class="color-editor__slider-group">
+                <div class="color-editor__label-row">
+                  <span>Saturation</span>
+                  <span class="color-editor__value" id="saturationValue">100%</span>
+                </div>
+                <input class="color-editor__range" id="saturationRange" type="range" min="75" max="135" step="1" value="100">
+              </div>
+              <div class="color-editor__actions">
+                <button class="color-editor__action" id="colorResetRegion" type="button">Скинути матеріал</button>
+                <button class="color-editor__action" id="colorResetAll" type="button">Скинути все</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initColorEditor() {
+      const canvas = document.getElementById('colorCanvas');
+      const editor = document.getElementById('colorEditor');
+      const hueRange = document.getElementById('hueRange');
+      const brightnessRange = document.getElementById('brightnessRange');
+      const saturationRange = document.getElementById('saturationRange');
+      const hueValue = document.getElementById('hueValue');
+      const brightnessValue = document.getElementById('brightnessValue');
+      const saturationValue = document.getElementById('saturationValue');
+      const regionButtons = Array.from(document.querySelectorAll('.color-editor__region-btn'));
+      const resetRegionButton = document.getElementById('colorResetRegion');
+      const resetAllButton = document.getElementById('colorResetAll');
+      if (!canvas || !editor) return;
+
+      const ctx = canvas.getContext('2d');
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+      let activeRegion = 'hpl1';
+      let rafId = null;
+
+      const defaultSettings = () => ({ hue: 0, brightness: 100, saturation: 100 });
+      const settings = {
+        hpl1: defaultSettings(),
+        hpl2: defaultSettings(),
+        hpl3: defaultSettings(),
+        wood: defaultSettings()
+      };
+
+      const imageMap = {
+        base: 'images/A1.png',
+        hpl1: 'images/HPL1alpha.png',
+        hpl2: 'images/HPL2alpha.png',
+        hpl3: 'images/HPL3alpha.png',
+        wood: 'images/Woodalpha.png'
+      };
+
+      const regionOrder = ['hpl1', 'hpl2', 'hpl3', 'wood'];
+      const assets = {};
+
+      function loadImage(src) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error(`Не вдалося завантажити ${src}`));
+          img.src = src;
+        });
+      }
+
+      function syncActiveControls() {
+        const state = settings[activeRegion];
+        hueRange.value = state.hue;
+        brightnessRange.value = state.brightness;
+        saturationRange.value = state.saturation;
+        hueValue.textContent = `${state.hue}°`;
+        brightnessValue.textContent = `${state.brightness}%`;
+        saturationValue.textContent = `${state.saturation}%`;
+
+        regionButtons.forEach((button) => {
+          button.classList.toggle('is-active', button.dataset.region === activeRegion);
+        });
+      }
+
+      function resizeCanvas() {
+        const stage = canvas.parentElement;
+        const rect = stage.getBoundingClientRect();
+        if (!rect.width || !rect.height || !assets.base) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+
+        tempCanvas.width = assets.base.naturalWidth;
+        tempCanvas.height = assets.base.naturalHeight;
+        render();
+      }
+
+      function drawContain(image, targetCtx) {
+        const cw = targetCtx.canvas.width;
+        const ch = targetCtx.canvas.height;
+        const iw = image.naturalWidth || image.width;
+        const ih = image.naturalHeight || image.height;
+        const scale = Math.min(cw / iw, ch / ih);
+        const dw = iw * scale;
+        const dh = ih * scale;
+        const dx = (cw - dw) * 0.5;
+        const dy = (ch - dh) * 0.5;
+        targetCtx.drawImage(image, dx, dy, dw, dh);
+      }
+
+      function scheduleRender() {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(render);
+      }
+
+      function renderOverlayMask(maskImage, state) {
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.filter = 'none';
+        tempCtx.globalCompositeOperation = 'source-over';
+        tempCtx.drawImage(maskImage, 0, 0, tempCanvas.width, tempCanvas.height);
+
+        const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const max = Math.max(r, g, b);
+          if (max <= 3) {
+            data[i + 3] = 0;
+          }
+        }
+
+        tempCtx.putImageData(imageData, 0, 0);
+
+        ctx.save();
+        ctx.filter = `hue-rotate(${state.hue}deg) brightness(${state.brightness / 100}) saturate(${state.saturation / 100})`;
+        drawContain(tempCanvas, ctx);
+        ctx.restore();
+      }
+
+      function render() {
+        rafId = null;
+        if (!assets.base) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawContain(assets.base, ctx);
+
+        regionOrder.forEach((region) => {
+          const mask = assets[region];
+          if (!mask) return;
+          renderOverlayMask(mask, settings[region]);
+        });
+      }
+
+      function handleSliderInput() {
+        const state = settings[activeRegion];
+        state.hue = Number(hueRange.value);
+        state.brightness = Number(brightnessRange.value);
+        state.saturation = Number(saturationRange.value);
+        syncActiveControls();
+        scheduleRender();
+      }
+
+      regionButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          activeRegion = button.dataset.region;
+          syncActiveControls();
+        });
+      });
+
+      hueRange.addEventListener('input', handleSliderInput);
+      brightnessRange.addEventListener('input', handleSliderInput);
+      saturationRange.addEventListener('input', handleSliderInput);
+
+      resetRegionButton.addEventListener('click', () => {
+        settings[activeRegion] = defaultSettings();
+        syncActiveControls();
+        scheduleRender();
+      });
+
+      resetAllButton.addEventListener('click', () => {
+        regionOrder.forEach((region) => {
+          settings[region] = defaultSettings();
+        });
+        syncActiveControls();
+        scheduleRender();
+      });
+
+      const resizeHandler = () => resizeCanvas();
+      window.addEventListener('resize', resizeHandler);
+
+      Promise.all(Object.entries(imageMap).map(([key, src]) => loadImage(src).then((img) => { assets[key] = img; })))
+        .then(() => {
+          syncActiveControls();
+          resizeCanvas();
+        })
+        .catch((error) => {
+          const hint = editor.querySelector('.color-editor__hint');
+          if (hint) hint.textContent = error.message;
+        });
+
+      cleanupCurrentView = () => {
+        window.removeEventListener('resize', resizeHandler);
+        if (rafId) cancelAnimationFrame(rafId);
+      };
     }
 
     cards.forEach((card, index) => {
